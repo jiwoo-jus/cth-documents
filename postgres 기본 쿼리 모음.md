@@ -169,4 +169,57 @@ REVOKE ALL PRIVILEGES ON DATABASE mydb FROM myuser;
 
 ---
 
+### 7. 테이블에 있는 행 개수 조회
 
+```sql
+# 특정 테이블의 총 행 개수
+SELECT COUNT(*) FROM tablename;
+```
+
+---
+
+### 8. 특정 컬럼명을 가진 테이블 찾기 (INFORMATION\_SCHEMA)
+
+기본 구조는 다음과 같아:
+
+```sql
+SELECT table_schema, table_name, column_name
+FROM information_schema.columns
+WHERE column_name ILIKE '패턴';
+```
+
+#### 정확히 일치하는 컬럼명 찾기
+
+```sql
+-- 정확히 'email'이라는 컬럼이 있는 테이블 찾기
+SELECT table_name
+FROM information_schema.columns
+WHERE column_name = 'email';
+```
+
+#### 특정 단어를 포함하는 컬럼 찾기
+
+```sql
+-- 'date'를 포함하는 컬럼
+SELECT table_name, column_name
+FROM information_schema.columns
+WHERE column_name ILIKE '%date%';
+```
+
+#### 특정 스키마에만 제한 (예: public)
+
+```sql
+-- public 스키마에서 'status'를 포함하는 컬럼
+SELECT table_name, column_name
+FROM information_schema.columns
+WHERE table_schema = 'public'
+  AND column_name ILIKE '%status%';
+```
+
+#### `DISTINCT table_name`으로 중복 없이 테이블 이름만 출력할 수도 있어:
+
+```sql
+SELECT DISTINCT table_name
+FROM information_schema.columns
+WHERE column_name ILIKE '%email%';
+```
